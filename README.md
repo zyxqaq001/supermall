@@ -20,3 +20,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## 新项目
 ### 1.目录结构划分
+### 2.引用了两个css文件base.css和normalize.css
