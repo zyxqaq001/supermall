@@ -4,29 +4,34 @@
     <home-swiper :banners="banners"/>
     <recommend-view :recommends="recommends"/>
     <feature-view></feature-view>
+    <tab-control class="tab-control" :titles="titles"></tab-control>
   </div>
 </template>
 
 <script>
-  import NavBar from 'components/common/navbar/NavBar';
   import HomeSwiper from './childComps/HomeSwiper'
   import RecommendView from './childComps/RecommendView'
   import FeatureView from './childComps/FeatureViews'
+
+  import NavBar from 'components/common/navbar/NavBar';
+  import TabControl from 'components/content/tabControl/TabControl'
 
   import {getHomeMultidata} from "network/home";
 
   export default {
     name: "Home",
     components: {
-      NavBar,
       HomeSwiper,
       RecommendView,
-      FeatureView
+      FeatureView,
+      NavBar,
+      TabControl
     },
     data() {
       return {
-        banners: [null],//添加一个null解决页面渲染不成功的问题
-        recommends: []
+        banners: [],
+        recommends: [],
+        titles:['流行','新款','精选']
       }
     },
     created() {
@@ -43,6 +48,7 @@
 <style scoped>
 #home{
   padding-top: 44px;
+  height: 5000px;
 }
   .home-nav {
     background-color: var(--color-tint);
@@ -52,5 +58,9 @@
     right: 0;
     top: 0;
     z-index: 99;
+  }
+  .tab-control{
+    position: sticky;
+    top: 44px;
   }
 </style>
