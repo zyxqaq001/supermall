@@ -19,8 +19,8 @@ export default {
     })
   },
   methods: {
-    scrollTO(x,y,time=300){
-      this.scroll.scrollTO(x,y,time=300)
+    scrollTo(x,y,time=300){
+      this.scroll.scrollTo(x,y,time=300)
     }
   },
 }
