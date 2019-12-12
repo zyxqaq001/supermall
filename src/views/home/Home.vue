@@ -2,13 +2,14 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
    
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <home-swiper :banners="banners"/>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
       <tab-control class="tab-control" :titles="titles" @tabClick="tabClick"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
+    <back-top @click.native="backClick"/>
   </div>
 </template>
 
@@ -21,6 +22,7 @@
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import Scroll from 'components/common/scroll/Scroll'
+  import BackTop from 'components/content/backtop/BackTop'
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
 
@@ -33,11 +35,12 @@
       NavBar,
       TabControl,
       GoodsList,
-      Scroll
+      Scroll,
+      BackTop,
     },
     data() {
       return {
-        banners: [],
+        banners: [null],
         recommends: [],
         titles:['流行','新款','精选'],
         goods:{//保存商品数据
@@ -75,6 +78,9 @@
            this.currentType = 'sell';
            break;
        }
+     },
+     backClick(){//监听组件的原生事件时需要加上修饰符native
+        this.$refs.scroll.scrollTo(0,0,1000)//通过$refs可以拿到scroll组件里的方法
      },
 
     //网络请求相关方法

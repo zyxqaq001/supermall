@@ -16,8 +16,12 @@ export default {
   },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper,{
-      
     })
+  },
+  methods: {
+    scrollTO(x,y,time=300){
+      this.scroll.scrollTO(x,y,time=300)
+    }
   },
 }
 </script>
