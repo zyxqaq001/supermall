@@ -29,7 +29,7 @@
     },
     data() {
       return {
-        banners: [null],
+        banners: [],
         recommends: [],
         titles:['流行','新款','精选'],
         goods:{
