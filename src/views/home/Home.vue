@@ -5,6 +5,7 @@
     <recommend-view :recommends="recommends"/>
     <feature-view></feature-view>
     <tab-control class="tab-control" :titles="titles"></tab-control>
+    <goods-list :goods="goods['pop'].list"></goods-list>
   </div>
 </template>
 
@@ -15,6 +16,7 @@
 
   import NavBar from 'components/common/navbar/NavBar';
   import TabControl from 'components/content/tabControl/TabControl'
+  import GoodsList from 'components/content/goods/GoodsList'
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
 
@@ -25,14 +27,15 @@
       RecommendView,
       FeatureView,
       NavBar,
-      TabControl
+      TabControl,
+      GoodsList
     },
     data() {
       return {
         banners: [],
         recommends: [],
         titles:['流行','新款','精选'],
-        goods:{
+        goods:{//保存商品数据
           'pop':{page:0,list:[]},
           'new':{page:0,list:[]},
           'sell':{page:0,list:[]},
@@ -49,13 +52,13 @@
     },
     methods: {
     //网络请求相关方法
-       getHomeMultidata(){
+       getHomeMultidata(){  // 请求多个数据
           getHomeMultidata().then(res => {
             this.banners = res.data.banner.list;
             this.recommends = res.data.recommend.list;
           })
        },
-       getHomeGoods(type){
+       getHomeGoods(type){ //请求商品数据
           const page = this.goods[type].page + 1
           getHomeGoods(type,page).then(res=>{
             this.goods[type].list.push(...res.data.list)
