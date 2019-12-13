@@ -19,10 +19,10 @@ export default {
       type:Number,
       default:0
     },
-    pullUpLoad:{
-      type:Boolean,
-      default:false
-    }
+    // pullUpLoad:{
+    //   type:Boolean,
+    //   default:false
+    // }
   },
   mounted() {
     //创建BScroll对象
@@ -34,18 +34,22 @@ export default {
     this.scroll.on('scroll',(position)=>{
       this.$emit('scroll',position)
     })
+   
     //监听上拉事件
-    this.scroll.on('pullingUp',()=>{
-       this.$emit('pullingUp')
-    })
+    // this.scroll.on('pullingUp',()=>{
+    //    this.$emit('pullingUp')
+    // })
   },
   methods: {
     scrollTo(x,y,time=300){
       this.scroll.scrollTo(x,y,time=300)
     },
-    finishPullUp() {
-        this.scroll.finishPullUp()
-      }
+    // finishPullUp() {
+    //     this.scroll.finishPullUp()
+    //   }
+    refresh(){
+       this.scroll.refresh()
+    }
   },
 }
 </script>
