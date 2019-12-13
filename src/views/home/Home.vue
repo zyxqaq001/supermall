@@ -2,7 +2,7 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
    
-    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" :pull-up-load="true" @pullingUp="loadMore">
       <home-swiper :banners="banners"/>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
@@ -40,7 +40,7 @@
     },
     data() {
       return {
-        banners: [null],
+        banners: [],
         recommends: [],
         titles:['流行','新款','精选'],
         goods:{//保存商品数据
@@ -86,6 +86,11 @@
      contentScroll(position){
        this.isShowBackTop = (-position.y)>1000
      },
+     loadMore(){
+       this.getHomeGoods(this.currentType)
+     },
+      
+
     //网络请求相关方法
        getHomeMultidata(){  // 请求多个数据
           getHomeMultidata().then(res => {
@@ -97,7 +102,8 @@
           const page = this.goods[type].page + 1
           getHomeGoods(type,page).then(res=>{
             this.goods[type].list.push(...res.data.list)
-            this.goods[type].page +=1
+            this.goods[type].page += 1
+            this.$refs.scroll.finishPullUp()
           })
        }
     },

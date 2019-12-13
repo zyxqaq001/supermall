@@ -18,22 +18,34 @@ export default {
     probeType:{
       type:Number,
       default:0
+    },
+    pullUpLoad:{
+      type:Boolean,
+      default:false
     }
   },
   mounted() {
     //创建BScroll对象
     this.scroll = new BScroll(this.$refs.wrapper,{
-      probeType:this.probeType
+      probeType:this.probeType,
+      click:true
     })
     //监听滚动
     this.scroll.on('scroll',(position)=>{
       this.$emit('scroll',position)
     })
+    //监听上拉事件
+    this.scroll.on('pullingUp',()=>{
+       this.$emit('pullingUp')
+    })
   },
   methods: {
     scrollTo(x,y,time=300){
       this.scroll.scrollTo(x,y,time=300)
-    }
+    },
+    finishPullUp() {
+        this.scroll.finishPullUp()
+      }
   },
 }
 </script>
