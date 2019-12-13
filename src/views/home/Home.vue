@@ -1,12 +1,14 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-   
+    <tab-control class="tabControl" :titles="titles" @tabClick="tabClick" ref="tabControl" v-show="isTabFixed">
+      </tab-control>
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" :pull-up-load="true" @pullingUp="loadMore" ><!-- -->
-      <home-swiper :banners="banners"/>
+      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"/>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
-      <tab-control class="tab-control" :titles="titles" @tabClick="tabClick"></tab-control>
+      <tab-control class="tab-control" :titles="titles" @tabClick="tabClick" ref="tabControl">
+      </tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
@@ -50,7 +52,9 @@
           'sell':{page:0,list:[]},
         },
         currentType:'pop',
-        isShowBackTop:false
+        isShowBackTop:false,
+        tabOffsetTop:0,
+        isTabFixed:false
       }
     },
     computed: {
@@ -72,6 +76,7 @@
       this.$bus.$on("itemImageLoad",()=>{
         refresh()
       })
+
     },
     methods: {
      //事件监听相关方法
@@ -94,9 +99,13 @@
      },
      contentScroll(position){
        this.isShowBackTop = (-position.y)>1000
+       this.isTabFixed = (-position.y)>this.tabOffsetTop
      },
      loadMore(){//上拉加载更多
        this.getHomeGoods(this.currentType)
+     },
+     swiperImageLoad(){//拿到正确的offsetTop值
+      this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
      },
   
     //网络请求相关方法
@@ -119,24 +128,16 @@
 </script>
 
 <style scoped>
-#home{
-  padding-top: 44px;
- 
-}
   .home-nav {
     background-color: var(--color-tint);
     color: #fff;
-    position: fixed;
+    /* position: fixed;
     left: 0;
     right: 0;
     top: 0;
-    z-index: 9;
+    z-index: 9; */
   }
-  .tab-control{
-    position: sticky;
-    top: 44px;
-     z-index: 9;
-  }
+  
   .content{
     overflow: hidden;
     position: absolute;
@@ -145,4 +146,9 @@
     right: 0;
     bottom: 50px;
   }
+  .tabControl{
+    position: relative;
+    z-index: 9;
+  }
+
 </style>
