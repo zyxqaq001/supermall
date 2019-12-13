@@ -1,13 +1,13 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <tab-control class="tabControl" :titles="titles" @tabClick="tabClick" ref="tabControl" v-show="isTabFixed">
+    <tab-control class="tabControl" :titles="titles" @tabClick="tabClick" ref="tabControl1" v-show="isTabFixed">
       </tab-control>
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" :pull-up-load="true" @pullingUp="loadMore" ><!-- -->
       <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"/>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
-      <tab-control class="tab-control" :titles="titles" @tabClick="tabClick" ref="tabControl">
+      <tab-control :titles="titles" @tabClick="tabClick" ref="tabControl2">
       </tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
@@ -54,7 +54,8 @@
         currentType:'pop',
         isShowBackTop:false,
         tabOffsetTop:0,
-        isTabFixed:false
+        isTabFixed:false,
+        saveY:0
       }
     },
     computed: {
@@ -78,6 +79,15 @@
       })
 
     },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.getScrollY()
+      console.log(this.saveY);
+      
+    },
     methods: {
      //事件监听相关方法
      
@@ -93,6 +103,9 @@
            this.currentType = 'sell';
            break;
        }
+       this.$refs.tabControl1.currentIndex = index;
+       this.$refs.tabControl2.currentIndex = index;
+
      },
      backClick(){//监听组件的原生事件时需要加上修饰符native
         this.$refs.scroll.scrollTo(0,0,1000)//通过$refs可以拿到scroll组件里的方法
@@ -105,9 +118,9 @@
        this.getHomeGoods(this.currentType)
      },
      swiperImageLoad(){//拿到正确的offsetTop值
-      this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
      },
-  
+    
     //网络请求相关方法
        getHomeMultidata(){  // 请求多个数据
           getHomeMultidata().then(res => {
@@ -124,6 +137,7 @@
           })
        }
     },
+   
   }
 </script>
 
