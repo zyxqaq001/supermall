@@ -2,7 +2,7 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
    
-    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll"  ><!--@pullingUp="loadMore" :pull-up-load="true"-->
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" :pull-up-load="true" @pullingUp="loadMore" ><!-- -->
       <home-swiper :banners="banners"/>
       <recommend-view :recommends="recommends"/>
       <feature-view></feature-view>
@@ -25,6 +25,7 @@
   import BackTop from 'components/content/backtop/BackTop'
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
+  import {debounce} from 'common/utils'
 
   export default {
     name: "Home",
@@ -66,8 +67,7 @@
      this.getHomeGoods('sell')
     },
     mounted() {
-      const refresh = this.debounce(this.$refs.scroll.refresh,500)
-
+      const refresh = debounce(this.$refs.scroll.refresh,500)
        //监听item中图片加载完成
       this.$bus.$on("itemImageLoad",()=>{
         refresh()
@@ -75,16 +75,7 @@
     },
     methods: {
      //事件监听相关方法
-     debounce(func,delay){
-       let timer = null
-       return function (...args) { 
-         if(timer) clearTimeout(timer)
-         timer = setTimeout(() => {
-           func.apply(this,args)
-         }, delay);
-        }
-     },
-
+     
      tabClick(index){
        switch (index) {
          case 0:
@@ -104,11 +95,10 @@
      contentScroll(position){
        this.isShowBackTop = (-position.y)>1000
      },
-    //  loadMore(){//上拉加载更多
-    //    this.getHomeGoods(this.currentType)
-    //  },
-      
-
+     loadMore(){//上拉加载更多
+       this.getHomeGoods(this.currentType)
+     },
+  
     //网络请求相关方法
        getHomeMultidata(){  // 请求多个数据
           getHomeMultidata().then(res => {
@@ -121,7 +111,7 @@
           getHomeGoods(type,page).then(res=>{
             this.goods[type].list.push(...res.data.list)
             this.goods[type].page += 1
-            // this.$refs.scroll.finishPullUp()
+            this.$refs.scroll.finishPullUp()//完成上拉加载更多
           })
        }
     },

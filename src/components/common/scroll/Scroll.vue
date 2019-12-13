@@ -19,10 +19,10 @@ export default {
       type:Number,
       default:0
     },
-    // pullUpLoad:{
-    //   type:Boolean,
-    //   default:false
-    // }
+    pullUpLoad:{
+      type:Boolean,
+      default:false
+    }
   },
   mounted() {
     //创建BScroll对象
@@ -31,27 +31,27 @@ export default {
       click:true
     })
     //监听滚动
-    this.scroll.on('scroll',(position)=>{
+   if (this.probeType === 2 || this.probeType === 3) {
+      this.scroll.on('scroll',(position)=>{
       this.$emit('scroll',position)
     })
-   
-    //监听上拉事件
-    // this.scroll.on('pullingUp',()=>{
-    //    this.$emit('pullingUp')
-    // })
+   }
+    // 监听上拉事件
+   if (this.pullUpLoad) {//为true时上拉
+      this.scroll.on('pullingUp',()=>{
+      this.$emit('pullingUp')
+    })
+   }
   },
   methods: {
     scrollTo(x,y,time=300){
-      // this.scroll.scrollTo(x,y,time)
       this.scroll && this.scroll.scrollTo(x,y,time)
     },
-    // finishPullUp() {
-    //     this.scroll.finishPullUp()
-    //   }
+    finishPullUp() {//完成下拉加载更多
+      this.scroll && this.scroll.finishPullUp()
+    },
     refresh(){
       this.scroll && this.scroll.refresh()
-      console.log('111');
-      
     }
   },
 }
