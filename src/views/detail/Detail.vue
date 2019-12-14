@@ -2,10 +2,10 @@
   <div id="detail">
    <detail-nav-bar class="detail-nav"></detail-nav-bar>
    <scroll class="content">
-    <detail-swiper :topImages="topImages"></detail-swiper>
+    <detail-swiper :top-images="topImages"></detail-swiper>
     <detail-base-info :goods="goods"></detail-base-info>
     <detail-shop-info :shop="shop"></detail-shop-info>
-    <!-- <detail-goods-info></detail-goods-info> -->
+    <detail-goods-info :detail-info="detailInfo"></detail-goods-info>
    </scroll>
   </div>
 </template>
@@ -36,20 +36,22 @@ export default {
       topImages:[],
       goods:{},
       shop:{},
+      detailInfo:{}
     }
   },
   created() {
-    this.iid = this.$route.params.iid//拿到iid
+    this.iid = this.$route.params.iid;//拿到iid
 
     getDetail(this.iid).then(res=>{//获取详情页数据
-      const data = res.result
+      const data = res.result;
       //获取轮播图数据
       this.topImages = data.itemInfo.topImages
       //获取商品信息
       this.goods = new Goods(data.itemInfo,data.columns,data.shopInfo.services)
       //获取店铺信息
       this.shop = new Shop(data.shopInfo)
-
+      //保存商品的详情数据
+      this.detailInfo = data.detailInfo;
     })
      
   },
