@@ -85,8 +85,6 @@
     },
     deactivated() {
       this.saveY = this.$refs.scroll.getScrollY()
-      console.log(this.saveY);
-      
     },
     methods: {
      //事件监听相关方法
