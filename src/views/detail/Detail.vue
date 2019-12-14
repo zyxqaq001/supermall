@@ -1,11 +1,12 @@
 <template>
   <div id="detail">
    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-   <scroll class="content">
-    <detail-swiper :top-images="topImages"></detail-swiper>
-    <detail-base-info :goods="goods"></detail-base-info>
-    <detail-shop-info :shop="shop"></detail-shop-info>
-    <detail-goods-info :detail-info="detailInfo"></detail-goods-info>
+   <scroll class="content" ref="scroll">
+     <detail-swiper :top-images="topImages"></detail-swiper>
+     <detail-base-info :goods="goods"></detail-base-info>
+     <detail-shop-info :shop="shop"></detail-shop-info>
+     <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
+     <detail-param-info :param-info="paramInfo"></detail-param-info>
    </scroll>
   </div>
 </template>
@@ -16,6 +17,7 @@ import DetailSwiper from './childComps/DetailSwiper'
 import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailShopInfo from './childComps/DetailShopInfo'
+import DetailParamInfo from './childComps/DetailParamInfo'
 
 import Scroll from 'components/common/scroll/Scroll'
 
@@ -28,6 +30,7 @@ export default {
     DetailBaseInfo,
     DetailGoodsInfo,
     DetailShopInfo,
+    DetailParamInfo,
     Scroll
   },
   data() {
@@ -36,7 +39,8 @@ export default {
       topImages:[],
       goods:{},
       shop:{},
-      detailInfo:{}
+      detailInfo:{},
+      paramInfo:{}
     }
   },
   created() {
@@ -52,8 +56,16 @@ export default {
       this.shop = new Shop(data.shopInfo)
       //保存商品的详情数据
       this.detailInfo = data.detailInfo;
+      //获取参数信息
+      this.paramInfo = new GoodsParam(data.itemParams.info,data.itemParams.rule)
+
     })
      
+  },
+  methods: {
+    imageLoad(){
+      this.$refs.scroll.refresh()
+    }
   },
 }
 </script>
