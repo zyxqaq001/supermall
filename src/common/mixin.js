@@ -5,6 +5,11 @@ export const itemListenerMixin = {
       itemImgListener: null,
     }
   },
+  methods: {
+    newRefresh(){
+      this.$refs.scroll.refresh
+    }
+  },
   mounted() {
     let newRefresh = debounce(this.$refs.scroll.refresh, 100)
     //监听item中图片加载完成
@@ -12,6 +17,5 @@ export const itemListenerMixin = {
       newRefresh();
     }
     this.$bus.$on("itemImageLoad", this.itemImgListener);
-    console.log('混入');
   },
 }
