@@ -6,7 +6,8 @@
      <detail-base-info :goods="goods"></detail-base-info>
      <detail-shop-info :shop="shop"></detail-shop-info>
      <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
-     <detail-param-info :param-info="paramInfo"></detail-param-info>
+     <detail-param-info :param-info="paramInfo"/>
+     <detail-comment-info :comment-info="commentInfo"/>
    </scroll>
   </div>
 </template>
@@ -18,6 +19,7 @@ import DetailBaseInfo from './childComps/DetailBaseInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
+import DetailCommentInfo from './childComps/DetailCommentInfo'
 
 import Scroll from 'components/common/scroll/Scroll'
 
@@ -31,7 +33,9 @@ export default {
     DetailGoodsInfo,
     DetailShopInfo,
     DetailParamInfo,
-    Scroll
+    DetailCommentInfo,
+    Scroll,
+   
   },
   data() {
     return {
@@ -40,7 +44,8 @@ export default {
       goods:{},
       shop:{},
       detailInfo:{},
-      paramInfo:{}
+      paramInfo:{},
+      commentInfo:{}
     }
   },
   created() {
@@ -58,7 +63,10 @@ export default {
       this.detailInfo = data.detailInfo;
       //获取参数信息
       this.paramInfo = new GoodsParam(data.itemParams.info,data.itemParams.rule)
-
+      //获取评论信息
+      if (data.rate.cRate !== 0) {
+        this.commentInfo = data.rate.list[0]
+      }
     })
      
   },
