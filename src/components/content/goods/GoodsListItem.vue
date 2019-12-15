@@ -26,8 +26,8 @@
       }
     },
     methods: {
-      imageLoad(){//vue监听事件
-        this.$bus.$emit('itemImageLoad')
+      imageLoad(){//vue监听事件     
+          this.$bus.$emit('itemImageLoad') 
       },
       itemClick(){
         this.$router.push('/detail'+this.goodsItem.iid)

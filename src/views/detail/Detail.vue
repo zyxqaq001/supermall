@@ -26,6 +26,9 @@ import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
 
 import {getDetail,Goods,Shop,GoodsParam,getRecommend} from 'network/detail'
+import { debounce } from "common/utils";
+import {itemListenerMixin} from 'common/mixin'
+
 export default {
   name:'Detail',
   components:{
@@ -49,9 +52,10 @@ export default {
       detailInfo:{},
       paramInfo:{},
       commentInfo:{},
-      recommend:[]
+      recommend:[],
     }
   },
+  mixins:[itemListenerMixin],
   created() {
     this.iid = this.$route.params.iid;//拿到iid
 
@@ -73,17 +77,25 @@ export default {
       }
 
     })
-    getRecommend().then(res=>{
-      console.log(res);
+    getRecommend().then(res=>{//获取商品推荐数据
       this.recommend = res.data.list
       
     })
+  },
+  mounted() {
+   console.log('detail');
+   
+  },
+  destroyed() {
+    this.$bus.$off('itemImgLoad',this.itemImgListener)
   },
   methods: {
     imageLoad(){
       this.$refs.scroll.refresh()
     }
+    
   },
+  
 }
 </script>
 <style scoped>
