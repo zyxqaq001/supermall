@@ -25,7 +25,7 @@
       <tab-control :titles="titles" @tabClick="tabClick" ref="tabControl2"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
-    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <back-top @click.native="backTop" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -38,11 +38,11 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import BackTop from "components/content/backtop/BackTop";
+
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
-import {itemListenerMixin} from 'common/mixin'
+import {itemListenerMixin,backTopMixin} from 'common/mixin'
 
 export default {
   name: "Home",
@@ -54,7 +54,6 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
   },
   data() {
     return {
@@ -74,7 +73,7 @@ export default {
       saveY: 0,
     };
   },
-  mixins:[itemListenerMixin],
+  mixins:[itemListenerMixin,backTopMixin],
   computed: {
     showGoods() {
       //显示数据
@@ -117,10 +116,6 @@ export default {
       }
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
-    },
-    backClick() {
-      //监听组件的原生事件时需要加上修饰符native
-      this.$refs.scroll.scrollTo(0, 0, 1000); //通过$refs可以拿到scroll组件里的方法
     },
     contentScroll(position) {
       this.isShowBackTop = -position.y > 1000;

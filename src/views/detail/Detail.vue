@@ -10,6 +10,8 @@
       <detail-comment-info ref="comment" :comment-info="commentInfo" />
       <goods-list ref="recommend" :goods="recommend" />
     </scroll>
+    <back-top @click.native="backTop" v-show="isShowBackTop" />
+    <detail-bottom-bar/>
   </div>
 </template>
 
@@ -21,6 +23,7 @@ import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
 import DetailParamInfo from "./childComps/DetailParamInfo";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
+import DetailBottomBar from './childComps/DatailBottomBar'
 
 import Scroll from "components/common/scroll/Scroll";
 import GoodsList from "components/content/goods/GoodsList";
@@ -33,7 +36,7 @@ import {
   getRecommend
 } from "network/detail";
 import { debounce } from "common/utils";
-import { itemListenerMixin } from "common/mixin";
+import { itemListenerMixin,backTopMixin } from "common/mixin";
 
 export default {
   name: "Detail",
@@ -46,7 +49,8 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     Scroll,
-    GoodsList
+    GoodsList,
+    DetailBottomBar
   },
   data() {
     return {
@@ -63,7 +67,7 @@ export default {
       currentIndex:0
     };
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin,backTopMixin],
   created() {
     this.iid = this.$route.params.iid; //拿到iid
 
@@ -103,7 +107,8 @@ export default {
       this.themeTopYs.push(this.$refs.params.$el.offsetTop);
       this.themeTopYs.push(this.$refs.comment.$el.offsetTop);
       this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
-      console.log(this.themeTopYs);
+      this.themeTopYs.push(Number.MAX_VALUE)
+     
     },100)
     
   },
@@ -121,11 +126,12 @@ export default {
       this.$refs.scroll.scrollTo(0,-(this.themeTopYs[index] - 44),100);
     },
     contentScroll(position){
+      this.isShowBackTop = -position.y > 1000;
       //获取Y值
       const positionY = -position.y;
       let length = this.themeTopYs.length;
-      for (let i = 0;i<length;i++) {
-        if (this.currentIndex != i && ((i<length-1 && positionY>=this.themeTopYs[i] && positionY<this.themeTopYs[i+1]) || (i===length-1 && positionY>=this.themeTopYs[i]))) { 
+      for (let i = 0;i<length-1;i++) {
+        if (this.currentIndex != i && ((i<length-1 && positionY>=this.themeTopYs[i] && positionY<this.themeTopYs[i+1]))) { 
           this.currentIndex = i  
           this.$refs.nav.currentIndex = this.currentIndex           
         }
