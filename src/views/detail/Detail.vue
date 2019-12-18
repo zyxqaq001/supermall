@@ -11,7 +11,7 @@
       <goods-list ref="recommend" :goods="recommend" />
     </scroll>
     <back-top @click.native="backTop" v-show="isShowBackTop" />
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addToCart="addToCart"/>
   </div>
 </template>
 
@@ -77,11 +77,7 @@ export default {
       //获取轮播图数据
       this.topImages = data.itemInfo.topImages;
       //获取商品信息
-      this.goods = new Goods(
-        data.itemInfo,
-        data.columns,
-        data.shopInfo.services
-      );
+      this.goods = new Goods(data.itemInfo,data.columns,data.shopInfo.services);
       //获取店铺信息
       this.shop = new Shop(data.shopInfo);
       //保存商品的详情数据
@@ -138,6 +134,17 @@ export default {
         
       }
        
+    },
+    addToCart(){
+     //获取购物车需要展示的信息
+     const product = {}
+     product.image = this.topImages[0];
+     product.title = this.goods.title;
+     product.desc = this.goods.desc;
+     product.price = this.goods.realPrice;
+     product.iid = this.iid;
+     this.$store.commit("addCart",product)
+     
     }
   }
 };
