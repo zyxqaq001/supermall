@@ -1,7 +1,11 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" ref="nav" @titleClick="titleClick"></detail-nav-bar>
+    
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+      <ul>
+       <li v-for="item in $store.state.cartList">{{item}}</li>
+     </ul>
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -64,7 +68,8 @@ export default {
       recommend: [],
       themeTopYs: [],
       getThemeTopY:null,
-      currentIndex:0
+      currentIndex:0,
+     
     };
   },
   mixins: [itemListenerMixin,backTopMixin],
@@ -143,7 +148,8 @@ export default {
      product.desc = this.goods.desc;
      product.price = this.goods.realPrice;
      product.iid = this.iid;
-     this.$store.commit("addCart",product)
+     this.$store.dispatch("addCart",product)
+    // this.$store.commit("addCart",product)
      
     }
   }
