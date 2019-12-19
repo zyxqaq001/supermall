@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <check-button class="check-button" :is-checked="isSelectAll"/>全选
+      <check-button class="check-button" :is-checked="isSelectAll" @click.native="checkClick"/>全选
     </div>
     <div class="price">
       合计：{{totalPrice}}
@@ -36,7 +36,16 @@ export default {
       if(this.cartList.length === 0) return false
       return !this.cartList.find(item => !item.checked)
     }
-  }
+  },
+  methods: {
+    checkClick(){
+      if(this.isSelectAll){//判断全选或全不选
+        this.cartList.forEach(item => item.checked = false);
+      }else{
+        this.cartList.forEach(item => item.checked = true);
+      }
+    }
+  },
 }
 </script>
 
