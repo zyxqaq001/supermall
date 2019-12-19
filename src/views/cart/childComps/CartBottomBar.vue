@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <check-button class="check-button"/>全选
+      <check-button class="check-button" :is-checked="isSelectAll"/>全选
     </div>
     <div class="price">
       合计：{{totalPrice}}
@@ -30,6 +30,11 @@ export default {
     },
     checkLength(){
       return  this.cartList.filter(item=>item.checked).length;
+    },
+    isSelectAll(){
+      // return !(this.cartList.filter(item => !item.checked).length);
+      if(this.cartList.length === 0) return false
+      return !this.cartList.find(item => !item.checked)
     }
   }
 }
