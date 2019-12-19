@@ -44,7 +44,8 @@ export default {
       }else{
         this.cartList.forEach(item => item.checked = true);
       }
-    }
+    },
+   
   },
 }
 </script>
@@ -59,13 +60,14 @@ export default {
 }
 .check-content{
   display: flex;
+  height: 40px;
   align-items: center;
   margin-left: 10px;
 }
 .check-button{
   width: 21px;
   height: 21px;
-  line-height: 18px;
+  line-height: 21px;
   margin-right: 5px;
 }
 .price{

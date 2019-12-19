@@ -29,13 +29,8 @@ import DetailBottomBar from './childComps/DatailBottomBar'
 import Scroll from "components/common/scroll/Scroll";
 import GoodsList from "components/content/goods/GoodsList";
 
-import {
-  getDetail,
-  Goods,
-  Shop,
-  GoodsParam,
-  getRecommend
-} from "network/detail";
+
+import {getDetail,Goods,Shop,GoodsParam,getRecommend} from "network/detail";
 import { debounce } from "common/utils";
 import { itemListenerMixin,backTopMixin } from "common/mixin";
 import {mapActions} from 'vuex'
@@ -52,7 +47,8 @@ export default {
     DetailCommentInfo,
     Scroll,
     GoodsList,
-    DetailBottomBar
+    DetailBottomBar,
+   
   },
   data() {
     return {
@@ -67,7 +63,7 @@ export default {
       themeTopYs: [],
       getThemeTopY:null,
       currentIndex:0,
-     
+      
     };
   },
   mixins: [itemListenerMixin,backTopMixin],
@@ -151,7 +147,7 @@ export default {
     //    console.log(res);//原始方法
     //  })
     this.addCart(product).then(res =>{//映射方法
-       console.log(res);
+      this.$toast.show(res,2500)
      })
      
     }
