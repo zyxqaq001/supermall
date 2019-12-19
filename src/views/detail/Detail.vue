@@ -38,6 +38,7 @@ import {
 } from "network/detail";
 import { debounce } from "common/utils";
 import { itemListenerMixin,backTopMixin } from "common/mixin";
+import {mapActions} from 'vuex'
 
 export default {
   name: "Detail",
@@ -116,6 +117,7 @@ export default {
   },
   
   methods: {
+    ...mapActions(["addCart"]),//映射actions的方法
     detailImageLoad() {
       this.newRefresh();
         this.getThemeTopY()
@@ -145,8 +147,12 @@ export default {
      product.desc = this.goods.desc;
      product.price = this.goods.realPrice;
      product.iid = this.iid;
-     this.$store.dispatch("addCart",product)
-    // this.$store.commit("addCart",product)
+    //  this.$store.dispatch("addCart",product).then(res =>{
+    //    console.log(res);//原始方法
+    //  })
+    this.addCart(product).then(res =>{//映射方法
+       console.log(res);
+     })
      
     }
   }
