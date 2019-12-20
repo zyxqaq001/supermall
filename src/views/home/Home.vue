@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      banners: [],
+      banners: [null],
       recommends: [],
       titles: ["流行", "新款", "精选"],
       goods: {
